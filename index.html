@@ -3,19 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>股票监控系统</title>
+    <title>系统登录</title>
     <style>
+        /* 登录页面样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body { 
-            background-color: #f0f2f5; 
-            padding: 10px;
-            padding-top: calc(10px + env(safe-area-inset-top));
-            padding-left: calc(10px + env(safe-area-inset-left));
-            padding-right: calc(10px + env(safe-area-inset-right));
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            -webkit-font-smoothing: antialiased;
+        
+        /* 登录容器 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            min-height: 100dvh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        /* 登录卡片 */
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        /* 登录标题 */
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #262626;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        /* 表单组 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #595959;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24,144,255,0.1);
+        }
+        
+        .form-group input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        /* 登录按钮 */
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            background: #40a9ff;
+        }
+        
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .login-btn:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+        
+        /* 错误提示 */
+        .error-message {
+            background: #fff1f0;
+            border: 1px solid #ffa39e;
+            color: #f5222d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: none;
+        }
+        
+        /* 锁定提示 */
+        .lock-info {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            color: #faad14;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: none;
+        }
+        
+        /* 退出按钮 */
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #ff4d4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .logout-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 主内容区域（登录后显示） */
+        #mainContent {
+            display: none;
+        }
+        
+        /* 隐藏登录页时的样式 */
+        body.login-hidden .login-container {
+            display: none;
+        }
+        
+        body.login-hidden #mainContent {
+            display: block;
+        }
+        
+        body.login-hidden .logout-btn {
+            display: block;
         }
         
         /* 加载动画 */
@@ -105,8 +246,16 @@
         }
         
         /* 页面内容 */
-        .page-content { display: none; padding-bottom: 80px; }
-        .page-content.active { display: block; }
+        .page-content { 
+            display: none; 
+            padding-bottom: 80px; 
+            height: calc(100dvh - 160px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .page-content.active { 
+            display: block; 
+        }
         
         /* 筛选按钮 */
         .filter-tabs { 
@@ -380,8 +529,12 @@
         .watchlist-btn.remove { background: #ff4d4f; }
         .watchlist-btn.remove:active { background: #ff7875; }
         
-        /* PC端适配 */
+        /* PC 端适配 */
         @media screen and (min-width: 768px) {
+            .login-card {
+                padding: 50px;
+            }
+            
             body { padding: 20px; padding-bottom: calc(20px + 70px); }
             .header { margin: -20px -20px 16px -20px; border-radius: 0 0 16px 16px; }
             .stock-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; }
@@ -402,15 +555,54 @@
         
         /* Touch-friendly improvements */
         @media (hover: none) and (pointer: coarse) {
-            .filter-tab, .bottom-tab, .stock-item, .save-btn, .watchlist-btn, .back-btn {
+            .filter-tab, .bottom-tab, .stock-item, .save-btn, .watchlist-btn, .back-btn, .login-btn {
                 min-height: 44px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部标题 -->
-    <div class="header">股票监控系统</div>
+    <!-- 登录页面 -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-title">系统登录</div>
+            
+            <!-- 免责声明 -->
+            <div style="background: #fff7e6; border: 1px solid #ffd591; color: #fa8c16; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; text-align: center;">
+                ⚠️ 本工具仅为个人学习、数据分析使用，不构成任何投资建议，不提供买卖指导，市场有风险，操作需自负
+            </div>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="lock-info" id="lockInfo"></div>
+            
+            <div class="form-group">
+                <label for="username">请输入账号</label>
+                <input type="text" id="username" placeholder="请输入账号" autocomplete="off">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">请输入密码</label>
+                <input type="password" id="password" placeholder="请输入密码" autocomplete="off">
+            </div>
+            
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">登录</button>
+        </div>
+    </div>
+    
+    <!-- 退出按钮 -->
+    <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">退出</button>
+    
+    <!-- 主内容区域（原有内容） -->
+    <div id="mainContent">
+        <!-- 顶部标题 -->
+        <div class="header">股票监控系统</div>
+        
+        <!-- 固定免责声明 -->
+        <div style="background: linear-gradient(135deg, #fff7e6 0%, #fff1f0 100%); border-bottom: 2px solid #ffd591; padding: 16px 20px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-size: 14px; color: #fa8c16; font-weight: 600; line-height: 1.6;">
+                ⚠️ 本工具仅为个人学习、数据分析使用，不构成任何投资建议，不提供买卖指导，市场有风险，操作需自负
+            </div>
+        </div>
     
     <!-- 首页（自选） -->
     <div id="pageHome" class="page-content">
@@ -462,6 +654,86 @@
                     <button class="filter-tab" onclick="filterMarketStocks('sell')">可卖出</button>
                 </div>
                 <div id="marketStockList" class="stock-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 财务造假识别 -->
+    <div id="pageFraudDetect" class="page-content">
+        <div style="display: flex; gap: 12px; height: calc(100dvh - 180px); max-height: calc(var(--vh, 1vh) * 100 - 180px); overflow: hidden;">
+            <!-- 左侧竖排分类标签 -->
+            <div style="width: 80px; flex-shrink: 0; background: white; border-radius: 12px; padding: 12px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                <div style="font-size: 12px; font-weight: 600; color: #262626; margin-bottom: 12px; text-align: center;">行业分类</div>
+                <div id="fraudCategoryTabs" style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="fraud-category-tab active" onclick="filterFraudByCategory('all')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #1890ff; color: white; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">全部</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('bank')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">🏦 银行</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('power')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">⚡ 电力</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('insurance')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">🛡️ 保险</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('broker')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">📊 券商</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('energy')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">🛢️ 能源</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('medicine')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">💊 医药</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('tech')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">💻 科技</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('consumer')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">🛒 消费</button>
+                    <button class="fraud-category-tab" onclick="filterFraudByCategory('construction')" style="padding: 10px 8px; border: none; border-radius: 8px; background: #f5f5f5; color: #595959; font-size: 12px; cursor: pointer; text-align: center; white-space: nowrap;">🏗️ 建筑</button>
+                </div>
+            </div>
+            
+            <!-- 右侧内容区 -->
+            <div style="flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                <!-- 搜索区域 -->
+                <div style="background: white; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="fraudSearchInput" placeholder="输入股票代码或名称搜索" 
+                               style="flex: 1; padding: 10px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px;"
+                               onkeyup="if(event.key==='Enter')searchFraudStock()">
+                        <button onclick="searchFraudStock()" 
+                                style="padding: 10px 16px; background: #1890ff; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer;">搜索</button>
+                    </div>
+                    <div id="fraudSearchResult" style="display: none; margin-top: 8px;">
+                        <div id="fraudSearchResultContent" style="padding: 10px; background: #f6ffed; border-radius: 8px; border: 1px solid #b7eb8f;"></div>
+                        <button onclick="addFraudSearchResult()" 
+                                style="width: 100%; margin-top: 8px; padding: 10px; background: #52c41a; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer;">添加进分析列表</button>
+                    </div>
+                </div>
+                
+                <!-- 财务健康度筛选 -->
+                <div class="filter-tabs" style="margin-bottom: 12px;">
+                    <button class="filter-tab active" onclick="filterFraudByHealth('all')">全部</button>
+                    <button class="filter-tab" onclick="filterFraudByHealth('good')" style="color: #52c41a;">🟢 财务良好</button>
+                    <button class="filter-tab" onclick="filterFraudByHealth('suspect')" style="color: #f5222d;">🔴 可能造假</button>
+                    <button class="filter-tab" onclick="filterFraudByHealth('normal')" style="color: #faad14;">🟡 正常</button>
+                </div>
+                
+                <!-- 统计信息 -->
+                <div style="background: white; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 13px; color: #666;">
+                            共 <span id="fraudTotalCount" style="font-weight: 600; color: #262626;">0</span> 只股票
+                        </div>
+                        <div style="font-size: 12px; color: #8c8c8c;">
+                            <span style="color: #52c41a;">🟢 良好 <span id="fraudGoodCount">0</span></span>
+                            <span style="margin: 0 8px; color: #f5222d;">🔴 可疑 <span id="fraudSuspectCount">0</span></span>
+                            <span style="color: #faad14;">🟡 正常 <span id="fraudNormalCount">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 股票列表 -->
+                <div id="fraudStockList" class="stock-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 造假详情弹窗 -->
+    <div id="fraudDetailModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; border-radius: 16px; padding: 24px; max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="font-size: 18px; font-weight: 600;" id="fraudDetailTitle">财务分析详情</div>
+                <button onclick="closeFraudDetailModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">×</button>
+            </div>
+            <div id="fraudDetailContent"></div>
+            <div style="margin-top: 20px;">
+                <button onclick="closeFraudDetailModal()" style="width: 100%; padding: 12px; background: #f5f5f5; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">关闭</button>
             </div>
         </div>
     </div>
@@ -861,6 +1133,10 @@
             <span class="tab-icon">🏪</span>
             <span class="tab-text">市场</span>
         </button>
+        <button class="bottom-tab" onclick="switchTab('fraudDetect')">
+            <span class="tab-icon">🔎</span>
+            <span class="tab-text">财识</span>
+        </button>
         <button class="bottom-tab" onclick="switchTab('screener')">
             <span class="tab-icon">🔍</span>
             <span class="tab-text">筛选</span>
@@ -873,5 +1149,171 @@
     
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="index.js"></script>
+    
+    <!-- 登录逻辑脚本 -->
+    <script>
+        // ==================== 认证系统配置 ====================
+        const AUTH_CONFIG = {
+            username: 'admin',      // 固定账号
+            password: '123456',     // 固定密码
+            lockDuration: 3 * 60 * 60 * 1000,  // 锁定 3 小时（毫秒）
+            storageKeys: {
+                loginStatus: 'login_status',
+                lockTime: 'lock_until_time'
+            }
+        };
+        
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            updateLockCountdown();
+        });
+        
+        // 检查登录状态
+        function checkLoginStatus() {
+            const loginStatus = localStorage.getItem(AUTH_CONFIG.storageKeys.loginStatus);
+            const lockUntil = localStorage.getItem(AUTH_CONFIG.storageKeys.lockTime);
+            
+            // 检查是否在锁定期
+            if (lockUntil) {
+                const now = Date.now();
+                const lockTime = parseInt(lockUntil);
+                
+                if (now < lockTime) {
+                    // 仍在锁定期，显示锁定信息
+                    showLockInfo(lockTime - now);
+                    disableLoginForm();
+                    return;
+                } else {
+                    // 锁定期已过，清除锁定记录
+                    localStorage.removeItem(AUTH_CONFIG.storageKeys.lockTime);
+                }
+            }
+            
+            // 检查是否已登录
+            if (loginStatus === 'success') {
+                showMainContent();
+            } else {
+                showLoginPage();
+            }
+        }
+        
+        // 处理登录
+        function handleLogin() {
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // 检查是否被锁定
+            const lockUntil = localStorage.getItem(AUTH_CONFIG.storageKeys.lockTime);
+            if (lockUntil) {
+                const now = Date.now();
+                if (now < parseInt(lockUntil)) {
+                    errorMessage.textContent = '账户已被锁定，请稍后再试';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+            }
+            
+            // 禁用按钮防止重复点击
+            loginBtn.disabled = true;
+            loginBtn.textContent = '验证中...';
+            
+            // 模拟短暂延迟
+            setTimeout(() => {
+                // 验证账号密码
+                if (usernameInput === AUTH_CONFIG.username && passwordInput === AUTH_CONFIG.password) {
+                    // 验证成功
+                    localStorage.setItem(AUTH_CONFIG.storageKeys.loginStatus, 'success');
+                    localStorage.removeItem(AUTH_CONFIG.storageKeys.lockTime);
+                    showMainContent();
+                } else {
+                    // 验证失败，设置 3 小时锁定
+                    const lockUntilTime = Date.now() + AUTH_CONFIG.lockDuration;
+                    localStorage.setItem(AUTH_CONFIG.storageKeys.lockTime, lockUntilTime.toString());
+                    
+                    errorMessage.textContent = '账号或密码错误，账户已被锁定 3 小时';
+                    errorMessage.style.display = 'block';
+                    disableLoginForm();
+                    updateLockCountdown();
+                }
+                
+                loginBtn.disabled = false;
+                loginBtn.textContent = '登录';
+            }, 500);
+        }
+        
+        // 处理退出
+        function handleLogout() {
+            if (confirm('确定要退出系统吗？')) {
+                localStorage.removeItem(AUTH_CONFIG.storageKeys.loginStatus);
+                location.reload();
+            }
+        }
+        
+        // 显示主内容
+        function showMainContent() {
+            document.body.classList.add('login-hidden');
+            document.title = '股票监控系统';
+            
+            // 初始化系统
+            if (typeof initSystem === 'function') {
+                initSystem();
+            }
+        }
+        
+        // 显示登录页
+        function showLoginPage() {
+            document.body.classList.remove('login-hidden');
+            document.title = '系统登录';
+        }
+        
+        // 禁用登录表单
+        function disableLoginForm() {
+            document.getElementById('username').disabled = true;
+            document.getElementById('password').disabled = true;
+            document.getElementById('loginBtn').disabled = true;
+        }
+        
+        // 显示锁定信息
+        function showLockInfo(remainingTime) {
+            const lockInfo = document.getElementById('lockInfo');
+            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            
+            lockInfo.textContent = `账户已被锁定，剩余时间：${hours}小时${minutes}分钟${seconds}秒`;
+            lockInfo.style.display = 'block';
+        }
+        
+        // 更新锁定倒计时
+        function updateLockCountdown() {
+            const lockUntil = localStorage.getItem(AUTH_CONFIG.storageKeys.lockTime);
+            if (!lockUntil) return;
+            
+            const lockTime = parseInt(lockUntil);
+            const interval = setInterval(() => {
+                const now = Date.now();
+                const remaining = lockTime - now;
+                
+                if (remaining <= 0) {
+                    clearInterval(interval);
+                    localStorage.removeItem(AUTH_CONFIG.storageKeys.lockTime);
+                    location.reload();
+                    return;
+                }
+                
+                showLockInfo(remaining);
+            }, 1000);
+        }
+        
+        // 回车键登录
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !document.body.classList.contains('login-hidden')) {
+                handleLogin();
+            }
+        });
+    </script>
 </body>
 </html>

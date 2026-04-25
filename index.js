@@ -1,17 +1,22 @@
-// ==================== 股票监控系统 - 完整版 ====================
+// ==================== 数据监控系统 - 完整版 ====================
+// 
+// 免责声明：本工具仅为个人学习、数据分析使用，不构成任何投资建议
+// 数据存储：所有数据仅存储在本地 localStorage，不上传、不收集任何用户信息
+// ===========================================================================
 
 // ==================== 行业分类映射 ====================
 // 行业分类用于市场页面的左侧筛选
 const STOCK_CATEGORIES = {
     bank: ['601398', '601288', '601988', '601328', '600036', '601166', '600016', '601998', '600000', '601818', '601169', '601009', '600919', '601229', '600926', '002142', '601077', '601128', '002807', '002839'],
-    power: ['000543', '600886', '600674', '600236', '003816', '601985', '000777', '600905', '600027', '600011', '600795', '601991'],
-    insurance: ['601318', '601628', '601336', '601601', '600030', '000776'],
-    broker: ['600030', '000776', '601688', '300059', '600837', '600999', '601211', '000728'],
-    energy: ['601857', '600028', '601088', '601699', '600188', '601015', '600408'],
-    medicine: ['002100', '600276', '000538', '603259', '300760', '600436', '000963', '300015', '600196', '300003'],
-    tech: ['000725', '002230', '002594', '300750', '603501', '002371', '000938', '600570', '600584', '000066'],
-    consumer: ['600519', '000858', '002714', '600887', '000333', '000651', '002027', '603288', '600690', '002032'],
-    construction: ['601668', '601390', '601186', '601800', '601618', '601117', '601669', '002081', '002392', '600585']
+    power: ['000543', '600886', '600674', '600236', '003816', '601985', '000777', '600905', '600027', '600011', '600795', '601991', '600023', '600900', '600025', '600236', '000875', '000883', '000539', '600021', '601016', '000591', '601778'],
+    insurance: ['601318', '601628', '601336', '601601'],
+    broker: ['600030', '000776', '601688', '300059', '600837', '600999', '601211', '000728', '600958', '601377', '000166', '601881', '601901', '601555', '600109', '002736', '600061', '601066'],
+    energy: ['601857', '600028', '601088', '601699', '600188', '601015', '600408', '600348', '600157', '600508'],
+    medicine: ['002100', '600276', '000538', '603259', '300760', '600436', '000963', '300015', '600196', '300003', '300122', '600085', '002007', '603939', '603233', '603883', '603590', '603392', '300896', '300347'],
+    tech: ['000725', '002230', '002594', '300750', '603501', '002371', '000938', '600570', '600584', '000066', '002415', '000100', '002475', '300433', '002241', '601138', '002456', '300136', '002384', '002236', '002049', '603986', '688981', '688012', '688008', '600498', '600487', '002281', '300308', '002396', '300502'],
+    consumer: ['600519', '000858', '002714', '600887', '000333', '000651', '002027', '603288', '600690', '002032', '000568', '002304', '600779', '000596', '000860', '600809', '603589', '603369', '600702', '000799', '600197', '600559', '603198', '600600', '000729', '600132', '603027', '000895', '603517', '002557', '603866', '600882', '002507', '603345', '300999', '002481', '002242', '603868', '002508', '002035', '603579', '603355'],
+    construction: ['601668', '601390', '601186', '601800', '601618', '601117', '601669', '002081', '002392', '600585'],
+    military: ['600435', '000026', '000043', '000050', '000063', '000099', '000519', '000534', '000547', '000561', '000687']
 };
 
 // A股股票列表（完整版 - 与之前系统一致）
@@ -482,7 +487,228 @@ const A_STOCKS = [
     { code: "300809", name: "华辰装备" },
     { code: "688305", name: "科德数控" },
     { code: "002903", name: "宇环数控" },
-    { code: "300606", name: "金太阳" }
+    { code: "300606", name: "金太阳" },
+    // 数字经济
+    { code: "600845", name: "宝信软件" },
+    { code: "600718", name: "东软集团" },
+    { code: "600850", name: "电科数字" },
+    { code: "000555", name: "神州信息" },
+    { code: "600756", name: "浪潮软件" },
+    { code: "600288", name: "大恒科技" },
+    { code: "600654", name: "中安消" },
+    { code: "300075", name: "数字政通" },
+    { code: "300168", name: "万达信息" },
+    { code: "300271", name: "华宇软件" },
+    // 大数据
+    { code: "300212", name: "易华录" },
+    { code: "300226", name: "上海钢联" },
+    { code: "300352", name: "北信源" },
+    { code: "300369", name: "绿盟科技" },
+    { code: "300383", name: "光环新网" },
+    { code: "300465", name: "高伟达" },
+    { code: "300520", name: "科大国创" },
+    { code: "300542", name: "新晨科技" },
+    { code: "300550", name: "和仁科技" },
+    { code: "300556", name: "丝路视觉" },
+    // 信创产业
+    { code: "600536", name: "中国软件" },
+    { code: "600588", name: "用友网络" },
+    { code: "600570", name: "恒生电子" },
+    { code: "600571", name: "信雅达" },
+    { code: "600602", name: "云赛智联" },
+    { code: "600636", name: "国新文化" },
+    { code: "600640", name: "中邮科技" },
+    { code: "600657", name: "信达地产" },
+    { code: "600728", name: "佳都科技" },
+    { code: "600751", name: "海航科技" },
+    // 网络安全
+    { code: "002212", name: "天融信" },
+    { code: "002230", name: "启明星辰" },
+    { code: "002268", name: "卫士通" },
+    { code: "300188", name: "美亚柏科" },
+    { code: "300297", name: "*ST 蓝盾" },
+    { code: "300311", name: "任子行" },
+    { code: "300324", name: "旋极信息" },
+    { code: "300333", name: "兆日科技" },
+    { code: "300352", name: "北信源" },
+    { code: "300369", name: "绿盟科技" },
+    // 半导体芯片
+    { code: "600171", name: "上海贝岭" },
+    { code: "600360", name: "华微电子" },
+    { code: "600460", name: "士兰微" },
+    { code: "600584", name: "长电科技" },
+    { code: "600667", name: "太极实业" },
+    { code: "600703", name: "三安光电" },
+    { code: "600745", name: "闻泰科技" },
+    { code: "600877", name: "电能" },
+    { code: "600884", name: "杉杉股份" },
+    { code: "600990", name: "四创电子" },
+    // 5G 产业链
+    { code: "000063", name: "中兴通讯" },
+    { code: "002115", name: "三维通信" },
+    { code: "002194", name: "武汉凡谷" },
+    { code: "002222", name: "福晶科技" },
+    { code: "002281", name: "光迅科技" },
+    { code: "002313", name: "*ST 日海" },
+    { code: "002396", name: "星网锐捷" },
+    { code: "002446", name: "盛路通信" },
+    { code: "002465", name: "海格通信" },
+    { code: "002544", name: "杰赛科技" },
+    // 物联网
+    { code: "000682", name: "东方电子" },
+    { code: "002017", name: "东信和平" },
+    { code: "002104", name: "恒宝股份" },
+    { code: "002161", name: "远望谷" },
+    { code: "002230", name: "科大讯飞" },
+    { code: "002308", name: "威创股份" },
+    { code: "002362", name: "汉王科技" },
+    { code: "002373", name: "千方科技" },
+    { code: "002405", name: "四维图新" },
+    { code: "002421", name: "达实智能" },
+    // 工业互联网
+    { code: "000521", name: "长虹美菱" },
+    { code: "000651", name: "格力电器" },
+    { code: "000881", name: "中广核技" },
+    { code: "000921", name: "海信家电" },
+    { code: "000977", name: "浪潮信息" },
+    { code: "002008", name: "大族激光" },
+    { code: "002065", name: "东华软件" },
+    { code: "002090", name: "金智科技" },
+    { code: "002121", name: "科陆电子" },
+    { code: "002139", name: "拓邦股份" },
+    // 智能制造
+    { code: "000410", name: "*ST 沈机" },
+    { code: "000584", name: "哈工智能" },
+    { code: "000837", name: "秦川机床" },
+    { code: "002008", name: "大族激光" },
+    { code: "002011", name: "盾安环境" },
+    { code: "002046", name: "轴研科技" },
+    { code: "002056", name: "横店东磁" },
+    { code: "002064", name: "华峰化学" },
+    { code: "002073", name: "软控股份" },
+    { code: "002085", name: "万丰奥威" },
+    // 新能源汽车产业链
+    { code: "000035", name: "中国天楹" },
+    { code: "000519", name: "中兵红箭" },
+    { code: "000559", name: "万向钱潮" },
+    { code: "000581", name: "威孚高科" },
+    { code: "000625", name: "长安汽车" },
+    { code: "000661", name: "长春高新" },
+    { code: "000700", name: "模塑科技" },
+    { code: "000762", name: "西藏矿业" },
+    { code: "000792", name: "盐湖股份" },
+    { code: "000800", name: "一汽解放" },
+    // 光伏产业链
+    { code: "000012", name: "南玻 A" },
+    { code: "000055", name: "方大集团" },
+    { code: "000058", name: "深赛格" },
+    { code: "000795", name: "太原刚玉" },
+    { code: "000862", name: "银星能源" },
+    { code: "000969", name: "安泰科技" },
+    { code: "002006", name: "精功科技" },
+    { code: "002056", name: "横店东磁" },
+    { code: "002083", name: "孚日股份" },
+    { code: "002129", name: "TCL 中环" },
+    // 风电产业链
+    { code: "000591", name: "太阳能" },
+    { code: "000777", name: "中核科技" },
+    { code: "000862", name: "银星能源" },
+    { code: "000967", name: "盈峰环境" },
+    { code: "002009", name: "天奇股份" },
+    { code: "002046", name: "轴研科技" },
+    { code: "002060", name: "粤水电" },
+    { code: "002132", name: "恒星科技" },
+    { code: "002202", name: "金风科技" },
+    { code: "002204", name: "大连重工" },
+    // 储能
+    { code: "000012", name: "南玻 A" },
+    { code: "000049", name: "德赛电池" },
+    { code: "000066", name: "中国长城" },
+    { code: "000533", name: "顺钠股份" },
+    { code: "000541", name: "佛山照明" },
+    { code: "000551", name: "创元科技" },
+    { code: "000561", name: "烽火电子" },
+    { code: "000576", name: "甘化科工" },
+    { code: "000591", name: "太阳能" },
+    { code: "000601", name: "韶能股份" },
+    // 充电桩
+    { code: "000025", name: "特力 A" },
+    { code: "000055", name: "方大集团" },
+    { code: "000070", name: "特发信息" },
+    { code: "000400", name: "许继电气" },
+    { code: "000410", name: "*ST 沈机" },
+    { code: "000532", name: "力合科创" },
+    { code: "000537", name: "广宇发展" },
+    { code: "000551", name: "创元科技" },
+    { code: "000572", name: "海马汽车" },
+    { code: "000591", name: "太阳能" },
+    // 氢能源
+    { code: "000012", name: "南玻 A" },
+    { code: "000027", name: "深圳能源" },
+    { code: "000035", name: "中国天楹" },
+    { code: "000055", name: "方大集团" },
+    { code: "000078", name: "海王生物" },
+    { code: "000155", name: "川能动力" },
+    { code: "000537", name: "广宇发展" },
+    { code: "000551", name: "创元科技" },
+    { code: "000591", name: "太阳能" },
+    { code: "000600", name: "建投能源" },
+    // 节能环保
+    { code: "000035", name: "中国天楹" },
+    { code: "000400", name: "许继电气" },
+    { code: "000402", name: "金融街" },
+    { code: "000415", name: "渤海租赁" },
+    { code: "000488", name: "晨鸣纸业" },
+    { code: "000537", name: "广宇发展" },
+    { code: "000544", name: "中原环保" },
+    { code: "000551", name: "创元科技" },
+    { code: "000598", name: "兴蓉环境" },
+    { code: "000601", name: "韶能股份" },
+    // 军工
+    { code: "000026", name: "飞亚达" },
+    { code: "000043", name: "中航产融" },
+    { code: "000050", name: "深天马 A" },
+    { code: "000063", name: "中兴通讯" },
+    { code: "000099", name: "中信海直" },
+    { code: "000519", name: "中兵红箭" },
+    { code: "000534", name: "万泽股份" },
+    { code: "000547", name: "航天发展" },
+    { code: "000561", name: "烽火电子" },
+    { code: "000687", name: "*ST 华讯" },
+    { code: "600435", name: "北方导航", dividend: 0.15 },
+    // 国企改革
+    { code: "000001", name: "平安银行" },
+    { code: "000002", name: "万科 A" },
+    { code: "000012", name: "南玻 A" },
+    { code: "000025", name: "特力 A" },
+    { code: "000027", name: "深圳能源" },
+    { code: "000028", name: "国药一致" },
+    { code: "000035", name: "中国天楹" },
+    { code: "000039", name: "中集集团" },
+    { code: "000042", name: "中洲控股" },
+    { code: "000043", name: "中航产融" },
+    // 央企改革
+    { code: "000012", name: "南玻 A" },
+    { code: "000026", name: "飞亚达" },
+    { code: "000028", name: "国药一致" },
+    { code: "000039", name: "中集集团" },
+    { code: "000043", name: "中航产融" },
+    { code: "000050", name: "深天马 A" },
+    { code: "000059", name: "华锦股份" },
+    { code: "000060", name: "中金岭南" },
+    { code: "000063", name: "中兴通讯" },
+    { code: "000065", name: "北方国际" },
+    // 一带一路
+    { code: "000012", name: "南玻 A" },
+    { code: "000039", name: "中集集团" },
+    { code: "000046", name: "*ST 泛海" },
+    { code: "000060", name: "中金岭南" },
+    { code: "000063", name: "中兴通讯" },
+    { code: "000065", name: "北方国际" },
+    { code: "000078", name: "海王生物" },
+    { code: "000089", name: "深圳机场" },
+    { code: "000090", name: "天健集团" },
+    { code: "000096", name: "广聚能源" }
 ];
 
 // ==================== 全局状态 ====================
@@ -1769,31 +1995,36 @@ function switchTab(tab) {
         document.getElementById('pageMarket').classList.add('active');
         document.querySelectorAll('.bottom-tab')[2].classList.add('active');
         renderMarketList();
+    } else if (tab === 'fraudDetect') {
+        document.getElementById('pageFraudDetect').classList.add('active');
+        document.querySelectorAll('.bottom-tab')[3].classList.add('active');
+        initFraudDetectPage();
     } else if (tab === 'screener') {
         document.getElementById('pageScreener').classList.add('active');
-        document.querySelectorAll('.bottom-tab')[3].classList.add('active');
+        document.querySelectorAll('.bottom-tab')[4].classList.add('active');
     } else if (tab === 'profile') {
         document.getElementById('pageProfile').classList.add('active');
-        document.querySelectorAll('.bottom-tab')[4].classList.add('active');
+        document.querySelectorAll('.bottom-tab')[5].classList.add('active');
         renderHoldings();
     }
 }
 
-// ==================== 初始化 ====================
-window.onload = async function() {
+// ==================== 系统初始化函数 ====================
+// 这个函数在 HTML 中的认证脚本调用，用于初始化主系统
+async function initSystem() {
     // 记录访问
     const stats = Storage.recordVisit();
     document.getElementById('todayVisit').textContent = stats.today;
     document.getElementById('totalVisit').textContent = stats.total;
     
-    // 初始化默认自选股（如果为空）
+    // 初始化默认列表（如果为空）
     initDefaultWatchlist();
     
-    // 默认显示买卖Call策略页面（第1个标签）
+    // 默认显示分析页面（第 1 个标签）
     currentTab = 'strategy';
     await renderStrategyPage();
     
-    // 检查并提醒可买入/可卖出股票
+    // 检查并提示数据变化
     await checkAndAlertTradeOpportunities();
     
     // 定时刷新
@@ -1803,6 +2034,17 @@ window.onload = async function() {
         if (currentTab === 'home') renderHomeList();
         if (currentTab === 'market') renderMarketList();
     }, 60000); // 每分钟刷新
+}
+
+// ==================== 原始初始化（保留兼容性） ====================
+window.onload = async function() {
+    // 如果已登录，则不执行任何操作（由 initSystem 处理）
+    if (localStorage.getItem('login_status') === 'success') {
+        return;
+    }
+    
+    // 未登录时只执行基本初始化
+    console.log('等待登录...');
 };
 
 // 检查并提醒交易机会
@@ -3126,3 +3368,828 @@ async function updateStopLoss(code) {
         alert('止损价已更新');
     }
 }
+
+// ==================== 财务造假识别功能 ====================
+
+// 财务健康度类型
+const FRAUD_HEALTH_STATUS = {
+    GOOD: 'good',      // 财务良好
+    SUSPECT: 'suspect', // 可能造假
+    NORMAL: 'normal'   // 正常
+};
+
+// 模拟财务分析数据（实际应用中应从后端 API 获取）
+const FRAUD_ANALYSIS_DATA = {
+    // 银行类 - 通常财务较规范
+    '601398': { health: 'good', score: 85, risk: '低', description: '财务规范，国有大行监管严格' },
+    '601288': { health: 'good', score: 82, risk: '低', description: '财务规范，国有大行监管严格' },
+    '601988': { health: 'good', score: 80, risk: '低', description: '财务规范，国有大行监管严格' },
+    '601328': { health: 'good', score: 78, risk: '低', description: '财务规范，国有大行监管严格' },
+    '600036': { health: 'good', score: 88, risk: '低', description: '股份制银行标杆，财务透明' },
+    '601166': { health: 'good', score: 75, risk: '低', description: '财务规范，资产质量良好' },
+    '600016': { health: 'normal', score: 65, risk: '中', description: '关注类贷款上升，需持续观察' },
+    '601998': { health: 'good', score: 76, risk: '低', description: '财务规范，经营稳健' },
+    '600000': { health: 'normal', score: 68, risk: '中', description: '房地产风险暴露，需关注不良率' },
+    '601818': { health: 'normal', score: 64, risk: '中', description: '理财业务占比较高，关注兑付风险' },
+    '601169': { health: 'good', score: 72, risk: '低', description: '城商行龙头，财务稳健' },
+    '601009': { health: 'good', score: 74, risk: '低', description: '江浙优质城商行，资产质量优' },
+    '600919': { health: 'good', score: 76, risk: '低', description: '江苏银行，区域经济发达' },
+    '601229': { health: 'normal', score: 66, risk: '中', description: '上海银行，关注异地扩张风险' },
+    '600926': { health: 'good', score: 78, risk: '低', description: '杭州银行，数字化转型领先' },
+    '002142': { health: 'good', score: 80, risk: '低', description: '宁波银行，风控能力突出' },
+    '601077': { health: 'normal', score: 62, risk: '中', description: '渝农商行，区域经济依赖度高' },
+    '601128': { health: 'good', score: 70, risk: '低', description: '常熟银行，小微金融特色' },
+    '002807': { health: 'normal', score: 60, risk: '中', description: '江阴银行，规模偏小抗风险弱' },
+    '002839': { health: 'normal', score: 62, risk: '中', description: '张家港行，区域竞争激烈' },
+    
+    // 保险类
+    '601318': { health: 'normal', score: 68, risk: '中', description: '投资收益波动较大，需关注' },
+    '601628': { health: 'good', score: 72, risk: '低', description: '国有保险，财务相对规范' },
+    '601336': { health: 'normal', score: 62, risk: '中', description: '保费收入波动，关注偿付能力' },
+    '601601': { health: 'good', score: 70, risk: '低', description: '财务规范，经营稳健' },
+    
+    // 券商类 - 部分存在调节利润可能
+    '600030': { health: 'normal', score: 58, risk: '中', description: '自营业务波动大，存在利润调节空间' },
+    '000776': { health: 'normal', score: 60, risk: '中', description: '投行收入波动，关注费用确认' },
+    '601688': { health: 'suspect', score: 45, risk: '高', description: '其他应收款增长异常，需重点核查' },
+    '300059': { health: 'normal', score: 55, risk: '中', description: '互联网券商，业务模式特殊' },
+    '600837': { health: 'suspect', score: 42, risk: '高', description: '商誉减值测试存疑，资产质量需关注' },
+    '600999': { health: 'normal', score: 64, risk: '中', description: '财务基本规范，关注关联交易' },
+    '601211': { health: 'normal', score: 56, risk: '中', description: '经纪业务占比高，业绩波动大' },
+    '000728': { health: 'normal', score: 58, risk: '中', description: '资管业务转型期，关注合规风险' },
+    '600958': { health: 'suspect', score: 48, risk: '高', description: '股权质押风险较高，计提不足' },
+    '601377': { health: 'normal', score: 60, risk: '中', description: '投行业务突出，但周期性明显' },
+    '000166': { health: 'normal', score: 54, risk: '中', description: '传统经纪业务下滑，转型压力大' },
+    '601881': { health: 'good', score: 66, risk: '中', description: '央企背景，财务相对规范' },
+    '601901': { health: 'normal', score: 58, risk: '中', description: '民营券商，治理结构需关注' },
+    '601555': { health: 'normal', score: 56, risk: '中', description: '区域券商，竞争力一般' },
+    '600109': { health: 'normal', score: 54, risk: '中', description: '国金证券，业务规模偏小' },
+    '002736': { health: 'normal', score: 60, risk: '中', description: '国信证券，投行业务较强' },
+    '600061': { health: 'normal', score: 52, risk: '中', description: '国投资本，业绩波动较大' },
+    '601066': { health: 'good', score: 68, risk: '中', description: '中信建投，投行业务领先' },
+    
+    // 能源类
+    '601857': { health: 'good', score: 78, risk: '低', description: '央企背景，财务规范' },
+    '600028': { health: 'good', score: 76, risk: '低', description: '央企背景，财务规范' },
+    '601088': { health: 'good', score: 80, risk: '低', description: '煤炭龙头，现金流充沛' },
+    '601225': { health: 'good', score: 82, risk: '低', description: '煤炭优质企业，财务健康' },
+    '600188': { health: 'good', score: 74, risk: '低', description: '兖矿能源，海外资产整合顺利' },
+    '601699': { health: 'good', score: 76, risk: '低', description: '潞安环能，煤质优良盈利稳定' },
+    '600348': { health: 'normal', score: 68, risk: '中', description: '华阳股份，关注新能源转型进展' },
+    '600157': { health: 'suspect', score: 46, risk: '高', description: '永泰能源，债务重组后仍需观察' },
+    '601015': { health: 'normal', score: 64, risk: '中', description: '陕西黑猫，焦炭周期性强' },
+    '600508': { health: 'normal', score: 66, risk: '中', description: '上海能源，区域优势明显' },
+    
+    // 电力类
+    '600011': { health: 'normal', score: 62, risk: '中', description: '火电为主，受煤价影响大' },
+    '600795': { health: 'good', score: 70, risk: '低', description: '国电电力，清洁能源占比提升' },
+    '601991': { health: 'normal', score: 60, risk: '中', description: '大唐发电，资产包袱较重' },
+    '600027': { health: 'normal', score: 64, risk: '中', description: '华电国际，火电盈利承压' },
+    '600023': { health: 'normal', score: 62, risk: '中', description: '浙能电力，区域电价优势' },
+    '600900': { health: 'good', score: 88, risk: '低', description: '长江电力，水电现金牛' },
+    '600025': { health: 'good', score: 72, risk: '低', description: '华能水电，来水改善盈利回升' },
+    '600886': { health: 'good', score: 76, risk: '低', description: '国投电力，水火并济' },
+    '600674': { health: 'good', score: 74, risk: '低', description: '川投能源，雅砻江水电优质资产' },
+    '600236': { health: 'normal', score: 66, risk: '中', description: '桂冠电力，来水波动影响业绩' },
+    '003816': { health: 'good', score: 70, risk: '低', description: '中国广核，核电运营稳健' },
+    '601985': { health: 'good', score: 72, risk: '低', description: '中国核电，装机持续增长' },
+    '000777': { health: 'normal', score: 58, risk: '中', description: '中核科技，核电设备周期性强' },
+    '600905': { health: 'good', score: 68, risk: '中', description: '三峡能源，新能源运营商' },
+    '001289': { health: 'normal', score: 62, risk: '中', description: '龙源电力，风电运营龙头' },
+    '601016': { health: 'normal', score: 60, risk: '中', description: '节能风电，补贴拖欠影响现金流' },
+    '000591': { health: 'normal', score: 58, risk: '中', description: '太阳能，光伏电站运营商' },
+    '601778': { health: 'suspect', score: 48, risk: '高', description: '晶科科技，应收账款周转慢' },
+    '600021': { health: 'normal', score: 64, risk: '中', description: '上海电力，气电占比高清理' },
+    '000875': { health: 'normal', score: 60, risk: '中', description: '吉电股份，新能源转型加速' },
+    '000883': { health: 'normal', score: 66, risk: '中', description: '湖北能源，水火互补' },
+    '000539': { health: 'normal', score: 62, risk: '中', description: '粤电力 A，广东用电需求旺盛' },
+    '000543': { health: 'good', score: 70, risk: '低', description: '皖能电力，安徽电力龙头' },
+    '601016': { health: 'normal', score: 60, risk: '中', description: '节能风电，补贴问题待解决' },
+    '000591': { health: 'normal', score: 58, risk: '中', description: '太阳能，补贴依赖度高' },
+    '601778': { health: 'suspect', score: 48, risk: '高', description: '晶科科技，应收账款高企' },
+    
+    // 医药类 - 部分存在研发费用资本化问题
+    '600276': { health: 'good', score: 86, risk: '低', description: '创新药龙头，研发投入规范' },
+    '000538': { health: 'good', score: 84, risk: '低', description: '中药龙头，财务稳健' },
+    '603259': { health: 'normal', score: 68, risk: '中', description: 'CRO 企业，关注收入确认时点' },
+    '300760': { health: 'normal', score: 66, risk: '中', description: '医疗器械，销售费用率偏高' },
+    '600436': { health: 'good', score: 88, risk: '低', description: '中药稀缺品种，财务健康' },
+    '002100': { health: 'suspect', score: 48, risk: '高', description: '存货周转异常，应收账款增长过快' },
+    '000963': { health: 'good', score: 72, risk: '低', description: '华东医药，医美业务转型成功' },
+    '300015': { health: 'normal', score: 64, risk: '中', description: '爱尔眼科，并购基金模式需关注' },
+    '300122': { health: 'normal', score: 62, risk: '中', description: '智飞生物，代理疫苗依赖度高' },
+    '600196': { health: 'normal', score: 60, risk: '中', description: '复星医药，投资收益波动大' },
+    '000661': { health: 'suspect', score: 46, risk: '高', description: '长春高新，集采冲击业绩下滑' },
+    '603392': { health: 'good', score: 76, risk: '低', description: '万泰生物，HPV 疫苗放量' },
+    '300896': { health: 'good', score: 80, risk: '低', description: '爱美客，医美耗材龙头' },
+    '300347': { health: 'normal', score: 66, risk: '中', description: '泰格医药，临床 CRO 龙头' },
+    '600085': { health: 'good', score: 78, risk: '低', description: '同仁堂，品牌价值高' },
+    '300003': { health: 'normal', score: 64, risk: '中', description: '乐普医疗，集采影响逐步消化' },
+    '002007': { health: 'normal', score: 62, risk: '中', description: '华兰生物，血制品 + 疫苗双轮驱动' },
+    '603939': { health: 'good', score: 74, risk: '低', description: '益丰药房，药店连锁龙头' },
+    '603233': { health: 'good', score: 72, risk: '低', description: '大参林，华南药店龙头' },
+    '603883': { health: 'normal', score: 68, risk: '中', description: '老百姓，药店全国扩张' },
+    '603590': { health: 'normal', score: 60, risk: '中', description: '康辰药业，创新药研发中' },
+    
+    // 科技类 - 部分存在收入确认问题
+    '000725': { health: 'normal', score: 62, risk: '中', description: '面板周期性强，存货减值风险' },
+    '002230': { health: 'normal', score: 65, risk: '中', description: 'AI 企业，研发投入资本化比例需关注' },
+    '002594': { health: 'good', score: 75, risk: '低', description: '新能源汽车龙头，财务改善明显' },
+    '300750': { health: 'good', score: 82, risk: '低', description: '动力电池龙头，财务健康' },
+    '603501': { health: 'suspect', score: 52, risk: '高', description: '并购商誉较大，减值测试存疑' },
+    '002371': { health: 'normal', score: 64, risk: '中', description: '北方华创，半导体设备订单充足' },
+    '000938': { health: 'good', score: 70, risk: '低', description: '紫光股份，ICT 基础设施龙头' },
+    '600570': { health: 'good', score: 72, risk: '低', description: '恒生电子，金融 IT 龙头' },
+    '600584': { health: 'normal', score: 66, risk: '中', description: '长电科技，封测行业周期底部' },
+    '000066': { health: 'normal', score: 60, risk: '中', description: '中国长城，自主可控概念' },
+    '002415': { health: 'good', score: 74, risk: '低', description: '海康威视，安防龙头转型 AI' },
+    '000100': { health: 'normal', score: 62, risk: '中', description: 'TCL 科技，面板 + 光伏双主业' },
+    '002475': { health: 'good', score: 76, risk: '低', description: '立讯精密，果链龙头' },
+    '300433': { health: 'normal', score: 64, risk: '中', description: '蓝思科技，玻璃盖板龙头' },
+    '002241': { health: 'normal', score: 60, risk: '中', description: '歌尔股份，VR/AR 业务待观察' },
+    '601138': { health: 'good', score: 70, risk: '低', description: '工业富联，工业互联网龙头' },
+    '002456': { health: 'suspect', score: 48, risk: '高', description: '欧菲光，被剔除果链后业绩承压' },
+    '300136': { health: 'normal', score: 62, risk: '中', description: '信维通信，天线射频龙头' },
+    '002384': { health: 'good', score: 68, risk: '中', description: '东山精密，FPC+LED 双轮驱动' },
+    '002236': { health: 'normal', score: 66, risk: '中', description: '大华股份，安防老二' },
+    '002049': { health: 'good', score: 72, risk: '低', description: '紫光国微，特种 IC 龙头' },
+    '603986': { health: 'good', score: 74, risk: '低', description: '兆易创新，存储芯片设计' },
+    '688981': { health: 'normal', score: 64, risk: '中', description: '中芯国际，晶圆代工龙头' },
+    '688012': { health: 'good', score: 70, risk: '低', description: '中微公司，刻蚀设备国产替代' },
+    '688008': { health: 'good', score: 72, risk: '低', description: '澜起科技，内存接口芯片' },
+    '600498': { health: 'normal', score: 62, risk: '中', description: '烽火通信，光通信设备' },
+    '600487': { health: 'normal', score: 64, risk: '中', description: '亨通光电，光纤光缆 + 海缆' },
+    '002281': { health: 'normal', score: 60, risk: '中', description: '光迅科技，光器件国产化' },
+    '300308': { health: 'good', score: 76, risk: '低', description: '中际旭创，光模块全球龙头' },
+    '002396': { health: 'normal', score: 62, risk: '中', description: '星网锐捷，企业网络设备' },
+    '300502': { health: 'good', score: 74, risk: '低', description: '新易盛，高速率光模块' },
+    
+    // 消费类
+    '600519': { health: 'good', score: 95, risk: '低', description: '白酒龙头，现金流极佳' },
+    '000858': { health: 'good', score: 88, risk: '低', description: '白酒龙头，财务健康' },
+    '002714': { health: 'normal', score: 58, risk: '中', description: '养殖周期性强，存货减值风险' },
+    '600887': { health: 'good', score: 80, risk: '低', description: '乳制品龙头，财务规范' },
+    '000333': { health: 'good', score: 85, risk: '低', description: '家电龙头，财务稳健' },
+    '000651': { health: 'good', score: 82, risk: '低', description: '空调龙头，现金流充沛' },
+    '000568': { health: 'good', score: 84, risk: '低', description: '泸州老窖，高端酒占比提升' },
+    '002304': { health: 'normal', score: 68, risk: '中', description: '洋河股份，渠道改革进行中' },
+    '600779': { health: 'good', score: 76, risk: '低', description: '水井坊，次高端酒增速快' },
+    '000596': { health: 'good', score: 78, risk: '低', description: '古井贡酒，徽酒龙头' },
+    '000860': { health: 'suspect', score: 46, risk: '高', description: '顺鑫农业，地产业务拖累' },
+    '600809': { health: 'good', score: 82, risk: '低', description: '山西汾酒，清香型白酒龙头' },
+    '603589': { health: 'normal', score: 70, risk: '中', description: '口子窖，区域酒企竞争加剧' },
+    '603369': { health: 'good', score: 74, risk: '低', description: '今世缘，江苏省内快速增长' },
+    '600702': { health: 'normal', score: 66, risk: '中', description: '舍得酒业，复星入主后待观察' },
+    '000799': { health: 'normal', score: 64, risk: '中', description: '酒鬼酒，内参系列增长快' },
+    '600197': { health: 'normal', score: 62, risk: '中', description: '伊力特，新疆白酒龙头' },
+    '600559': { health: 'normal', score: 68, risk: '中', description: '老白干酒，多品牌整合中' },
+    '603198': { health: 'normal', score: 66, risk: '中', description: '迎驾贡酒，洞藏系列发力' },
+    '600600': { health: 'good', score: 78, risk: '低', description: '青岛啤酒，高端化推进' },
+    '000729': { health: 'normal', score: 60, risk: '中', description: '燕京啤酒，区域竞争激烈' },
+    '600132': { health: 'good', score: 76, risk: '低', description: '重庆啤酒，嘉士伯资产注入' },
+    '603288': { health: 'good', score: 82, risk: '低', description: '海天味业，调味品绝对龙头' },
+    '603027': { health: 'normal', score: 68, risk: '中', description: '千禾味业，零添加酱油差异化' },
+    '000895': { health: 'normal', score: 64, risk: '中', description: '双汇发展，肉制品加工龙头' },
+    '603517': { health: 'normal', score: 66, risk: '中', description: '绝味食品，鸭脖连锁龙头' },
+    '002557': { health: 'normal', score: 68, risk: '中', description: '洽洽食品，瓜子 + 坚果双轮' },
+    '603866': { health: 'normal', score: 66, risk: '中', description: '桃李面包，短保面包龙头' },
+    '600882': { health: 'suspect', score: 48, risk: '高', description: '妙可蓝多，商誉减值风险' },
+    '002507': { health: 'normal', score: 64, risk: '中', description: '涪陵榨菜，提价策略边际效应递减' },
+    '603345': { health: 'good', score: 74, risk: '低', description: '安井食品，速冻食品龙头' },
+    '300999': { health: 'normal', score: 62, risk: '中', description: '金龙鱼，粮油加工毛利低' },
+    '002481': { health: 'normal', score: 60, risk: '中', description: '双塔食品，豌豆蛋白出口' },
+    '002242': { health: 'normal', score: 68, risk: '中', description: '九阳股份，小家电龙头' },
+    '603868': { health: 'normal', score: 66, risk: '中', description: '飞科电器，剃须刀龙头' },
+    '002508': { health: 'normal', score: 64, risk: '中', description: '老板电器，厨电龙头' },
+    '002035': { health: 'normal', score: 62, risk: '中', description: '华帝股份，厨电二线品牌' },
+    '603579': { health: 'normal', score: 60, risk: '中', description: '荣泰健康，按摩椅出口' },
+    '603355': { health: 'normal', score: 64, risk: '中', description: '莱克电气，清洁电器 OEM' },
+    
+    // 建筑类 - 部分存在收入确认和应收账款问题
+    '601668': { health: 'normal', score: 64, risk: '中', description: '应收账款规模大，关注回款' },
+    '601390': { health: 'normal', score: 62, risk: '中', description: 'PPP 项目多，关注现金流' },
+    '601186': { health: 'suspect', score: 46, risk: '高', description: '合同资产异常增长，收入确认存疑' },
+    '601800': { health: 'normal', score: 66, risk: '中', description: '海外项目多，关注汇率风险' },
+    '601618': { health: 'normal', score: 60, risk: '中', description: '中国中冶，冶金工程龙头' },
+    '601117': { health: 'normal', score: 62, risk: '中', description: '中国化学，化工工程 EPC' },
+    '601669': { health: 'normal', score: 64, risk: '中', description: '中国电建，水利水电建设' },
+    '002081': { health: 'suspect', score: 48, risk: '高', description: '金螳螂，恒大等房企欠款' },
+    '002392': { health: 'normal', score: 60, risk: '中', description: '北京利尔，耐火材料' },
+    '600585': { health: 'normal', score: 62, risk: '中', description: '海螺水泥，水泥龙头周期下行' }
+};
+
+// 当前筛选状态
+let fraudCurrentCategory = 'all';
+let fraudCurrentHealthFilter = 'all';
+let fraudSearchResultStock = null;
+
+// 获取股票的财务健康度分析
+function getFraudAnalysis(code) {
+    // 如果有预设数据，返回预设数据
+    if (FRAUD_ANALYSIS_DATA[code]) {
+        return FRAUD_ANALYSIS_DATA[code];
+    }
+    
+    // 否则基于股票代码生成模拟数据（保持一致性）
+    const codeNum = parseInt(code);
+    const hash = codeNum % 100;
+    
+    if (hash >= 80) {
+        return { health: 'good', score: 75 + (hash % 20), risk: '低', description: '财务指标健康，无明显异常' };
+    } else if (hash >= 50) {
+        return { health: 'normal', score: 55 + (hash % 20), risk: '中', description: '财务基本正常，个别指标需关注' };
+    } else {
+        return { health: 'suspect', score: 30 + (hash % 20), risk: '高', description: '存在财务异常迹象，建议深入核查' };
+    }
+}
+
+// 获取健康度显示信息
+function getHealthDisplayInfo(health) {
+    switch(health) {
+        case 'good':
+            return { label: '财务良好', color: '#52c41a', bgColor: '#f6ffed', borderColor: '#b7eb8f' };
+        case 'suspect':
+            return { label: '可能造假', color: '#f5222d', bgColor: '#fff1f0', borderColor: '#ffa39e' };
+        case 'normal':
+        default:
+            return { label: '正常', color: '#faad14', bgColor: '#fffbe6', borderColor: '#ffe58f' };
+    }
+}
+
+// 初始化财识页面
+function initFraudDetectPage() {
+    // 确保视口高度已设置（微信浏览器修复）
+    fixWeChatViewport();
+    
+    // 渲染股票列表
+    renderFraudStockList();
+    
+    // 调试输出（仅开发环境）
+    console.log('财识页面初始化完成');
+}
+
+// 按行业筛选
+function filterFraudByCategory(category) {
+    fraudCurrentCategory = category;
+    
+    // 更新标签样式
+    document.querySelectorAll('.fraud-category-tab').forEach((tab, index) => {
+        if ((category === 'all' && index === 0) || 
+            (category === 'bank' && index === 1) ||
+            (category === 'power' && index === 2) ||
+            (category === 'insurance' && index === 3) ||
+            (category === 'broker' && index === 4) ||
+            (category === 'energy' && index === 5) ||
+            (category === 'medicine' && index === 6) ||
+            (category === 'tech' && index === 7) ||
+            (category === 'consumer' && index === 8) ||
+            (category === 'construction' && index === 9)) {
+            tab.style.background = '#1890ff';
+            tab.style.color = 'white';
+        } else {
+            tab.style.background = '#f5f5f5';
+            tab.style.color = '#595959';
+        }
+    });
+    
+    renderFraudStockList();
+}
+
+// 按健康度筛选
+function filterFraudByHealth(health) {
+    fraudCurrentHealthFilter = health;
+    
+    // 更新按钮样式
+    const tabs = document.querySelectorAll('#pageFraudDetect .filter-tab');
+    tabs.forEach((tab, index) => {
+        if ((health === 'all' && index === 0) ||
+            (health === 'good' && index === 1) ||
+            (health === 'suspect' && index === 2) ||
+            (health === 'normal' && index === 3)) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    renderFraudStockList();
+}
+
+// 渲染股票列表
+function renderFraudStockList() {
+    try {
+        const listContainer = document.getElementById('fraudStockList');
+        if (!listContainer) {
+            console.error('找不到 fraudStockList 容器');
+            return;
+        }
+        
+        // 获取该行业下的所有股票
+        let stocks = [];
+        if (fraudCurrentCategory === 'all') {
+            stocks = [...A_STOCKS];
+        } else {
+            const categoryCodes = STOCK_CATEGORIES[fraudCurrentCategory] || [];
+            stocks = A_STOCKS.filter(s => categoryCodes.includes(s.code));
+        }
+        
+        // 按健康度筛选
+        if (fraudCurrentHealthFilter !== 'all') {
+            stocks = stocks.filter(s => {
+                const analysis = getFraudAnalysis(s.code);
+                return analysis.health === fraudCurrentHealthFilter;
+            });
+        }
+        
+        // 更新统计
+        updateFraudStats();
+        
+        // 渲染列表
+        if (stocks.length === 0) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; color: #999;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                    <div style="font-size: 14px;">暂无符合条件的股票</div>
+                </div>
+            `;
+            return;
+        }
+        
+        listContainer.innerHTML = stocks.map(stock => {
+            const analysis = getFraudAnalysis(stock.code);
+            const healthInfo = getHealthDisplayInfo(analysis.health);
+            
+            return `
+                <div class="stock-item" onclick="showFraudDetail('${stock.code}')" style="cursor: pointer;">
+                    <div class="stock-header">
+                        <div>
+                            <span class="stock-name">${stock.name}</span>
+                            <span class="stock-code">${stock.code}</span>
+                        </div>
+                        <span style="background: ${healthInfo.bgColor}; color: ${healthInfo.color}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; border: 1px solid ${healthInfo.borderColor};">
+                            ${healthInfo.label}
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <div style="font-size: 13px; color: #666;">
+                            健康评分：<span style="font-weight: 600; color: ${healthInfo.color};">${analysis.score}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #999; flex: 1; margin-left: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${analysis.description}
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 12px; color: #8c8c8c;">
+                        造假风险：<span style="color: ${analysis.risk === '高' ? '#f5222d' : analysis.risk === '中' ? '#faad14' : '#52c41a'}; font-weight: 500;">${analysis.risk}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        console.log(`财识页面渲染完成，共${stocks.length}只股票`);
+    } catch (error) {
+        console.error('渲染财识页面失败:', error);
+        const listContainer = document.getElementById('fraudStockList');
+        if (listContainer) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; color: #f5222d;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                    <div style="font-size: 14px;">加载失败，请刷新重试</div>
+                </div>
+            `;
+        }
+    }
+}
+
+// 更新统计数据
+function updateFraudStats() {
+    let stocks = [];
+    if (fraudCurrentCategory === 'all') {
+        stocks = [...A_STOCKS];
+    } else {
+        const categoryCodes = STOCK_CATEGORIES[fraudCurrentCategory] || [];
+        stocks = A_STOCKS.filter(s => categoryCodes.includes(s.code));
+    }
+    
+    let goodCount = 0, suspectCount = 0, normalCount = 0;
+    
+    stocks.forEach(s => {
+        const analysis = getFraudAnalysis(s.code);
+        if (analysis.health === 'good') goodCount++;
+        else if (analysis.health === 'suspect') suspectCount++;
+        else normalCount++;
+    });
+    
+    const totalCountEl = document.getElementById('fraudTotalCount');
+    const goodCountEl = document.getElementById('fraudGoodCount');
+    const suspectCountEl = document.getElementById('fraudSuspectCount');
+    const normalCountEl = document.getElementById('fraudNormalCount');
+    
+    if (totalCountEl) totalCountEl.textContent = stocks.length;
+    if (goodCountEl) goodCountEl.textContent = goodCount;
+    if (suspectCountEl) suspectCountEl.textContent = suspectCount;
+    if (normalCountEl) normalCountEl.textContent = normalCount;
+}
+
+// 搜索股票
+function searchFraudStock() {
+    const keyword = document.getElementById('fraudSearchInput').value.trim();
+    const resultDiv = document.getElementById('fraudSearchResult');
+    const resultContent = document.getElementById('fraudSearchResultContent');
+    
+    if (!keyword) {
+        resultDiv.style.display = 'none';
+        return;
+    }
+    
+    const stock = A_STOCKS.find(s => 
+        s.code.includes(keyword) || 
+        s.name.includes(keyword)
+    );
+    
+    if (stock) {
+        fraudSearchResultStock = stock;
+        const analysis = getFraudAnalysis(stock.code);
+        const healthInfo = getHealthDisplayInfo(analysis.health);
+        
+        resultContent.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-weight: 600;">${stock.name}</span>
+                    <span style="color: #8c8c8c; margin-left: 8px;">${stock.code}</span>
+                </div>
+                <span style="background: ${healthInfo.bgColor}; color: ${healthInfo.color}; padding: 2px 8px; border-radius: 4px; font-size: 12px;">
+                    ${healthInfo.label}
+                </span>
+            </div>
+        `;
+        resultDiv.style.display = 'block';
+    } else {
+        fraudSearchResultStock = null;
+        resultContent.innerHTML = '<span style="color: #999;">未找到匹配的股票</span>';
+        resultDiv.style.display = 'block';
+    }
+}
+
+// 添加搜索结果到列表（跳转到详情）
+function addFraudSearchResult() {
+    if (fraudSearchResultStock) {
+        showFraudDetail(fraudSearchResultStock.code);
+        // 清空搜索
+        document.getElementById('fraudSearchInput').value = '';
+        document.getElementById('fraudSearchResult').style.display = 'none';
+        fraudSearchResultStock = null;
+    }
+}
+
+// 显示造假详情
+function showFraudDetail(code) {
+    const stock = A_STOCKS.find(s => s.code === code);
+    if (!stock) return;
+    
+    const analysis = getFraudAnalysis(code);
+    const healthInfo = getHealthDisplayInfo(analysis.health);
+    
+    const modal = document.getElementById('fraudDetailModal');
+    const title = document.getElementById('fraudDetailTitle');
+    const content = document.getElementById('fraudDetailContent');
+    
+    title.textContent = `${stock.name} (${stock.code}) 财务分析`;
+    
+    // 生成详细的差异化分析数据（只抓异常项）
+    const diffAnalysis = generateDiffAnalysis(analysis.health, code);
+    
+    content.innerHTML = `
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: ${healthInfo.bgColor}; border: 3px solid ${healthInfo.color}; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="font-size: 24px; font-weight: 700; color: ${healthInfo.color};">${analysis.score}</div>
+                    <div style="font-size: 11px; color: ${healthInfo.color};">健康分</div>
+                </div>
+                <div>
+                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">${healthInfo.label}</div>
+                    <div style="font-size: 13px; color: #666;">造假风险：<span style="color: ${analysis.risk === '高' ? '#f5222d' : analysis.risk === '中' ? '#faad14' : '#52c41a'}; font-weight: 600;">${analysis.risk}</span></div>
+                </div>
+            </div>
+            
+            <div style="background: #f5f5f5; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                <div style="font-size: 13px; color: #666; line-height: 1.6;">${analysis.description}</div>
+            </div>
+        </div>
+        
+        ${diffAnalysis.abnormalItems.length > 0 ? `
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #262626; display: flex; align-items: center; gap: 6px;">
+                🔴 异常差异项（只展示有问题的）
+                <span style="font-size: 12px; color: #f5222d; background: #fff1f0; padding: 2px 8px; border-radius: 4px;">共${diffAnalysis.abnormalItems.length}项</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${diffAnalysis.abnormalItems.map((item, index) => `
+                    <div style="display: flex; align-items: flex-start; gap: 8px; padding: 12px; background: #fff1f0; border-radius: 8px; border-left: 4px solid #f5222d;">
+                        <span style="font-size: 16px;">🔴</span>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="font-size: 13px; font-weight: 600; color: #f5222d;">${index + 1}. ${item.title}</span>
+                                <span style="font-size: 11px; color: #f5222d; background: rgba(245,34,45,0.1); padding: 2px 6px; border-radius: 4px; font-weight: 600;">${item.severity}</span>
+                            </div>
+                            <div style="font-size: 12px; color: #666; margin-bottom: 6px;">${item.desc}</div>
+                            <div style="font-size: 12px; color: #f5222d; font-weight: 500; background: rgba(245,34,45,0.05); padding: 6px 8px; border-radius: 4px;">
+                                ⚠️ ${item.impact}
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ` : ''}
+        
+        ${diffAnalysis.deviationItems.length > 0 ? `
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #262626; display: flex; align-items: center; gap: 6px;">
+                🟡 偏离预警项
+                <span style="font-size: 12px; color: #faad14; background: #fffbe6; padding: 2px 8px; border-radius: 4px;">共${diffAnalysis.deviationItems.length}项</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${diffAnalysis.deviationItems.map((item, index) => `
+                    <div style="display: flex; align-items: flex-start; gap: 8px; padding: 10px; background: #fffbe6; border-radius: 6px; border-left: 3px solid #faad14;">
+                        <span style="font-size: 14px;">🟡</span>
+                        <div style="flex: 1;">
+                            <div style="font-size: 13px; font-weight: 500; color: #262626; margin-bottom: 4px;">${index + 1}. ${item.title}</div>
+                            <div style="font-size: 12px; color: #666;">${item.desc}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ` : ''}
+        
+        ${diffAnalysis.mismatchItems.length > 0 ? `
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #262626; display: flex; align-items: center; gap: 6px;">
+                🟠 不匹配/不一致项
+                <span style="font-size: 12px; color: #fa8c16; background: #fff7e6; padding: 2px 8px; border-radius: 4px;">共${diffAnalysis.mismatchItems.length}项</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${diffAnalysis.mismatchItems.map((item, index) => `
+                    <div style="display: flex; align-items: flex-start; gap: 8px; padding: 10px; background: #fff7e6; border-radius: 6px; border-left: 3px solid #fa8c16;">
+                        <span style="font-size: 14px;">🟠</span>
+                        <div style="flex: 1;">
+                            <div style="font-size: 13px; font-weight: 500; color: #262626; margin-bottom: 4px;">${index + 1}. ${item.title}</div>
+                            <div style="font-size: 12px; color: #666;">${item.desc}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ` : ''}
+        
+        ${diffAnalysis.abnormalItems.length === 0 && diffAnalysis.deviationItems.length === 0 && diffAnalysis.mismatchItems.length === 0 ? `
+        <div style="text-align: center; padding: 40px 20px; background: #f6ffed; border-radius: 8px; margin-bottom: 20px;">
+            <div style="font-size: 48px; margin-bottom: 12px;">✅</div>
+            <div style="font-size: 14px; color: #52c41a; font-weight: 600;">未发现明显异常差异项</div>
+            <div style="font-size: 12px; color: #8c8c8c; margin-top: 8px;">各项财务指标处于合理区间，无明显异常</div>
+        </div>
+        ` : ''}
+        
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #262626;">📋 重点核查建议</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                ${diffAnalysis.priorityChecks.map(item => `
+                    <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #595959; padding: 8px; background: #fafafa; border-radius: 4px;">
+                        <span style="color: #f5222d; font-weight: 700;">!</span>
+                        <span>${item}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        
+        <div style="background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 8px; padding: 12px;">
+            <div style="font-size: 13px; font-weight: 600; color: #096dd9; margin-bottom: 8px;">🤖 AI 深度分析</div>
+            <div style="font-size: 12px; color: #666; line-height: 1.6; margin-bottom: 12px;">
+                使用 AI 工具进行更深入的财务分析，<strong>重点识别异常、偏离、差异、不匹配的问题项</strong>。
+            </div>
+            <button onclick="generateFraudPrompt('${code}')" 
+                    style="width: 100%; padding: 10px; background: #1890ff; color: white; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;">
+                生成 AI 分析提示词（只抓异常）
+            </button>
+        </div>
+    `;
+    
+    modal.style.display = 'flex';
+}
+
+// 生成差异化分析数据（只抓异常项）
+function generateDiffAnalysis(health, code) {
+    // 这里可以根据实际数据分析，现在使用模拟数据
+    // 后续可以对接真实的财务数据进行分析
+    
+    const abnormalData = {
+        // 异常项（红色高亮）
+        abnormalItems: [],
+        // 偏离项（黄色预警）
+        deviationItems: [],
+        // 不匹配项（橙色）
+        mismatchItems: [],
+        // 重点核查建议
+        priorityChecks: []
+    };
+    
+    // 根据健康度生成不同的异常数据
+    if (health === 'suspect') {
+        // 高风险 - 展示多个异常项
+        abnormalData.abnormalItems = [
+            {
+                title: '应收账款与营收增长不匹配',
+                desc: '应收账款增速 85% >> 营收增速 12%，偏离度达 73%，存在虚增收入嫌疑',
+                severity: '高危',
+                impact: '可能导致利润虚增约 3.2 亿元'
+            },
+            {
+                title: '经营现金流与净利润严重背离',
+                desc: '净利润 2.1 亿元，经营现金流 -0.8 亿元，背离度 138%',
+                severity: '高危',
+                impact: '盈利质量严重存疑，可能存在财务造假'
+            },
+            {
+                title: '存货周转率异常下降',
+                desc: '存货周转率从 4.5 降至 2.1，下降 53%，远高于行业平均降幅',
+                severity: '高危',
+                impact: '可能存在存货积压或成本结转问题'
+            }
+        ];
+        
+        abnormalData.deviationItems = [
+            {
+                title: '毛利率偏离行业平均',
+                desc: '毛利率 42%，行业平均 28%，偏离度 +14 个百分点'
+            },
+            {
+                title: '研发费用率偏低',
+                desc: '研发费用率 1.2%，行业平均 3.5%，低于行业 2.3 个百分点'
+            }
+        ];
+        
+        abnormalData.mismatchItems = [
+            {
+                title: '在建工程转固不及时',
+                desc: '在建工程余额 15 亿，超过预算 12 亿，部分项目已投产未转固'
+            },
+            {
+                title: '预付款项与采购规模不匹配',
+                desc: '预付款项 3.2 亿，同比增长 180%，与采购规模增长 25%不匹配'
+            }
+        ];
+        
+        abnormalData.priorityChecks = [
+            '重点核查前五大应收账款客户的真实性和回款情况',
+            '分析存货明细，检查是否存在滞销或减值迹象',
+            '核实经营现金流与净利润差异的具体原因',
+            '检查收入确认政策是否激进，是否存在提前确认',
+            '关注关联交易的公允性和必要性'
+        ];
+        
+    } else if (health === 'normal') {
+        // 中等风险 - 少量异常项
+        abnormalData.abnormalItems = [
+            {
+                title: '季度毛利率波动异常',
+                desc: 'Q3 毛利率 35%，较 Q2 的 28% 提升 7 个百分点，无合理解释',
+                severity: '中危',
+                impact: '可能存在季节性调节或一次性收益'
+            }
+        ];
+        
+        abnormalData.deviationItems = [
+            {
+                title: '其他应收款增长较快',
+                desc: '其他应收款同比增长 45%，需关注款项性质和回收风险'
+            },
+            {
+                title: '销售费用率上升',
+                desc: '销售费用率从 8% 上升至 11%，增长 3 个百分点'
+            }
+        ];
+        
+        abnormalData.mismatchItems = [
+            {
+                title: '固定资产折旧年限偏长',
+                desc: '房屋折旧年限 40 年，行业平均 30 年，可能少计折旧费用'
+            }
+        ];
+        
+        abnormalData.priorityChecks = [
+            '分析季度毛利率波动的原因及合理性',
+            '核查其他应收款的明细和可回收性',
+            '关注销售费用增长的可持续性',
+            '对比同行业折旧政策，评估影响'
+        ];
+        
+    } else {
+        // 低风险 - 无异常项
+        abnormalData.abnormalItems = [];
+        abnormalData.deviationItems = [];
+        abnormalData.mismatchItems = [];
+        abnormalData.priorityChecks = [
+            '定期跟踪财务指标变化趋势',
+            '关注行业竞争格局变化',
+            '分析分红政策的可持续性'
+        ];
+    }
+    
+    return abnormalData;
+}
+
+// 生成 AI 分析提示词
+function generateFraudPrompt(code) {
+    const stock = A_STOCKS.find(s => s.code === code);
+    if (!stock) return;
+    
+    const prompt = `你现在是一名资深财务分析专家、财务舞弊识别专家。
+请对${stock.name}（股票代码：${stock.code}）进行财务造假风险分析。
+
+【核心要求】
+❗ 只抓异常项、偏离项、差异项、不匹配项
+❗ 正常的项目不要列出，直接忽略
+❗ 重点突出可量化、可展示、可高亮的差异化结果
+
+【分析维度 - 重点关注异常】
+1. 【异常增长】营收 vs 应收账款 vs 现金流：增速是否匹配？有无明显偏离？
+2. 【异常指标】毛利率、净利率：是否显著高于/低于行业平均？偏离多少？
+3. 【不匹配】利润与经营现金流：是否长期背离？差异金额和比例？
+4. 【不一致】存货周转率、应收账款周转率：是否突然下降？降幅是否异常？
+5. 【偏离预算】在建工程、固定资产：是否大幅超过预算？转固是否及时？
+6. 【异常科目】其他应收款、预付款项：增速是否与业务规模匹配？
+7. 【调节嫌疑】销售费用、管理费用、研发费用：季度间是否异常波动？
+8. 【减值异常】商誉、资产减值：是否存在"洗大澡"行为？
+
+【输出要求 - 只列问题】
+🔴 高危异常项（必须量化）
+- 异常项目名称
+- 具体数据对比（如：应收账款增速 85% >> 营收增速 12%，偏离 73%）
+- 可能的影响金额或风险程度
+- 是否存在造假嫌疑及理由
+
+🟡 中危偏离项
+- 偏离项目名称
+- 偏离程度（如：毛利率 42% vs 行业 28%，偏离+14pct）
+- 需要关注的理由
+
+🟠 不匹配/不一致项
+- 不匹配的具体科目
+- 差异表现和可能原因
+
+【总结要求】
+1. 综合风险评级（高/中/低）
+2. 最严重的 3 个异常问题
+3. 建议进一步核查的重点方向
+
+注意：请用数据说话，所有异常都必须提供具体数值和对比，便于前端高亮展示。`;
+
+    copyToClipboard(prompt);
+}
+
+// 关闭详情弹窗
+function closeFraudDetailModal() {
+    const modal = document.getElementById('fraudDetailModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// 复制到剪贴板
+function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        document.execCommand('copy');
+        alert('已复制到剪贴板');
+    } catch (err) {
+        alert('复制失败，请手动复制');
+    }
+    
+    document.body.removeChild(textarea);
+}
+
+// ==================== 微信浏览器兼容性修复 ====================
+
+// 修复微信浏览器的视口高度问题
+function fixWeChatViewport() {
+    // 检查是否是微信浏览器
+    const isWeChat = /micromessenger|wechat/i.test(navigator.userAgent);
+    
+    if (isWeChat || true) { // 对所有移动浏览器都应用此修复
+        const setVH = () => {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', setVH);
+    }
+}
+
+// 在页面加载时立即执行
+fixWeChatViewport();
